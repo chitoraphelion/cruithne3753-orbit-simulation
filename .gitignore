@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# uv lock artifacts we don't want to track on a first commit? — keep uv.lock tracked.
+
+# Generated data / caches
+data/
+ephem_cache/
+clone_cache/
+*.npz
+*.npy
+
+# Generated plots (rebuildable)
+plots/generated/
+
+# Typst build artefacts
+*.pdf
+report/*.pdf
+!report/build/.keep
+
+# OS
+.DS_Store

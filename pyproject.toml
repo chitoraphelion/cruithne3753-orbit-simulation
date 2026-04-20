@@ -1,0 +1,31 @@
+[project]
+name = "cruithne"
+version = "0.1.0"
+description = "Numerical simulation of the co-orbital asteroid 3753 Cruithne (recreation of Wiegert et al. 1998)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2.0",
+    "scipy>=1.13",
+    "matplotlib>=3.8",
+    "rebound>=4.4",
+    "astropy>=6.0",
+    "astroquery>=0.4.7",
+    "pandas>=2.2",
+    "tqdm>=4.66",
+]
+
+[project.scripts]
+cruithne-main = "cruithne.cli:run_main"
+cruithne-clones = "cruithne.cli:run_clones"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cruithne"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
