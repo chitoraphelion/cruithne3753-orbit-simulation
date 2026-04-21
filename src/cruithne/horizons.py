@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -15,6 +16,9 @@ from astropy.time import Time
 from astroquery.jplhorizons import Horizons
 
 from .constants import AU, DAY
+
+warnings.filterwarnings("ignore", message=".*id_type.*")
+warnings.filterwarnings("ignore", message=".*dubious year.*")
 
 CACHE_DIR = Path(os.environ.get("CRUITHNE_CACHE", "data/horizons_cache"))
 
