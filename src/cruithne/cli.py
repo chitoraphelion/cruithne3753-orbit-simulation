@@ -58,13 +58,26 @@ def run_clones() -> None:
     p.add_argument("--start", default="1900-01-01")
     p.add_argument("--outdir", default="data/clones")
     p.add_argument("--eps", nargs="*", type=float, default=None)
+    p.add_argument("--years", type=float, default=None,
+                   help="±years past/future (overrides --fast default)")
+    p.add_argument("--sample-years", type=float, default=None,
+                   help="state-sampling step in years (overrides --fast default)")
     args = p.parse_args()
+
+    if args.years is not None:
+        span = args.years
+    else:
+        span = 2000.0 if args.fast else 13000.0
+    if args.sample_years is not None:
+        sample = args.sample_years
+    else:
+        sample = 0.5 if args.fast else 0.05
 
     cfg = CloneConfig(
         start_date=args.start,
-        years_past=2000.0 if args.fast else 13000.0,
-        years_future=2000.0 if args.fast else 13000.0,
-        sample_years=0.5 if args.fast else 0.05,
+        years_past=span,
+        years_future=span,
+        sample_years=sample,
         epsilon_list=tuple(args.eps) if args.eps else (1e-5, 1e-6),
     )
     outdir = Path(args.outdir)
