@@ -74,7 +74,8 @@ def fig2_a_t(res, d) -> None:
 
 def fig5_dlam(res, d, years_span: float = 2000.0) -> None:
     x0 = res.years.min()
-    x1 = x0 + years_span
+    x1 = min(x0 + years_span, res.years.max())
+    span = x1 - x0
     dt = float(np.mean(np.diff(res.t_sec)))
     step = max(1, int(round((0.1 * 365.25 * DAY) / dt)))
     m = (res.years >= x0) & (res.years <= x1)
@@ -85,7 +86,7 @@ def fig5_dlam(res, d, years_span: float = 2000.0) -> None:
     ax.axhline(0, color=COLORS["muted"], lw=0.6)
     ax.set_xlabel("Год")
     ax.set_ylabel(r"$\Delta\lambda$ (°)")
-    ax.set_title(r"Резонансная фаза $\Delta\lambda(t)$ (2000 лет, выборка каждые 0.1 года)")
+    ax.set_title(rf"Резонансная фаза $\Delta\lambda(t)$ ({span:.0f} лет, выборка каждые 0.1 года)")
     fig.tight_layout()
     fig.savefig(OUT / "fig5_dlam.png")
     plt.close(fig)
