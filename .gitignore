@@ -26,5 +26,8 @@ plots/generated/
 report/*.pdf
 !report/build/.keep
 
+# Logs / ephemeral
+*.log
+
 # OS
 .DS_Store
