@@ -62,6 +62,11 @@ def run_clones() -> None:
                    help="±years past/future (overrides --fast default)")
     p.add_argument("--sample-years", type=float, default=None,
                    help="state-sampling step in years (overrides --fast default)")
+    p.add_argument("--dt-days", type=float, default=0.5,
+                   help="integrator step size in days (default 0.5)")
+    p.add_argument("--integrator", default="whfast",
+                   choices=("whfast", "mercurius", "ias15"),
+                   help="REBOUND integrator (default whfast; mercurius for close encounters)")
     args = p.parse_args()
 
     if args.years is not None:
@@ -75,11 +80,15 @@ def run_clones() -> None:
 
     cfg = CloneConfig(
         start_date=args.start,
+        integrator_step_days=args.dt_days,
+        integrator_name=args.integrator,
         years_past=span,
         years_future=span,
         sample_years=sample,
         epsilon_list=tuple(args.eps) if args.eps else (1e-5, 1e-6),
     )
+    print(f"[clones] integrator={cfg.integrator_name}  dt={cfg.integrator_step_days} d  "
+          f"span=±{span:g} yr  sample={sample:g} yr")
     outdir = Path(args.outdir)
     for eps in cfg.epsilon_list:
         print(f"[clones] eps={eps:.0e}")

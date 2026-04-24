@@ -55,6 +55,7 @@ def instantaneous_a(r: np.ndarray, v: np.ndarray, r_sun: np.ndarray, v_sun: np.n
 class CloneConfig:
     start_date: str = "1900-01-01"
     integrator_step_days: float = 0.5
+    integrator_name: str = "whfast"
     years_past: float = 13000.0
     years_future: float = 13000.0
     sample_years: float = 0.05
@@ -77,9 +78,12 @@ class CloneResult:
 def build_base_sim(cfg: CloneConfig) -> tuple[rebound.Simulation, dict[str, tuple[np.ndarray, np.ndarray]]]:
     sim = rebound.Simulation()
     sim.G = G
-    sim.integrator = "whfast"
+    sim.integrator = cfg.integrator_name
     sim.dt = cfg.integrator_step_days * DAY
     sim.units = ("m", "s", "kg")
+    if cfg.integrator_name == "mercurius":
+        # Switch to IAS15 inside r_crit = 3 Hill radii of any planet
+        sim.ri_mercurius.r_crit_hill = 3.0
     states: dict[str, tuple[np.ndarray, np.ndarray]] = {}
     for name, obj_id, id_type, mass in PLANETS:
         r, v = fetch_vector(obj_id, cfg.start_date, id_type=id_type)

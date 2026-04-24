@@ -1,4 +1,4 @@
-.PHONY: install smoke full figures clones report clean
+.PHONY: install smoke full full-quality figures clones clones-quality report clean
 
 install:
 	uv sync
@@ -13,6 +13,17 @@ full:
 	uv run cruithne-main
 	uv run cruithne-clones --years 13000 --sample-years 0.5
 	$(MAKE) figures
+
+# Overnight quality run: finer sampling + smaller dt + MERCURIUS hybrid
+# (WHFast -> IAS15 within 3 Hill radii of a planet).
+full-quality:
+	uv run cruithne-main
+	uv run cruithne-clones --years 13000 --sample-years 0.05 --dt-days 0.1 --integrator mercurius
+	$(MAKE) figures
+
+clones-quality:
+	uv run cruithne-clones --years 13000 --sample-years 0.05 --dt-days 0.1 --integrator mercurius
+	uv run python scripts/plot_clones.py
 
 figures:
 	uv run python scripts/plot_main_figures.py
