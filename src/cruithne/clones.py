@@ -172,8 +172,13 @@ def _scan(
 
 def run_ensemble(cfg: CloneConfig, eps: float) -> CloneResult:
     sim_base, states = build_base_sim(cfg)
+    n_massive = sim_base.N
     r_ast, v_ast = fetch_vector(CRUITHNE_ID[0], cfg.start_date, id_type=CRUITHNE_ID[1])
     names = add_clones(sim_base, eps, r_ast, v_ast)
+    # Mark clones as test particles. Required for MERCURIUS so it does not
+    # compute pairwise close encounters between the 64 nearly-coincident
+    # clones (which causes IAS15 sub-steps to NaN out). Harmless for WHFast.
+    sim_base.N_active = n_massive
     sim_base.move_to_com()
     R_I, SR = spheres_of_influence(states, cfg.s_factor)
 
